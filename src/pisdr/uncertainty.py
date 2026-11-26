@@ -20,15 +20,19 @@ import numpy as np
 
 def conformal_threshold(cal_probs, cal_labels, alpha=0.10):
     """Finite-sample corrected split-conformal quantile: the
-    ceil((n+1)(1-alpha))-th smallest nonconformity score (clipped to the
-    observed range). Scores: 1 - p(true class)."""
+    ceil((n+1)(1-alpha))-th smallest nonconformity score. Scores:
+    1 - p(true class). Standard convention: if the required rank exceeds
+    the calibration sample size n, the threshold is INFINITE (every
+    prediction set includes both classes) - clipping the rank to n would
+    silently under-cover, so it is never done."""
     cal_probs = np.asarray(cal_probs, dtype=float)
     cal_labels = np.asarray(cal_labels, dtype=int)
     scores = np.where(cal_labels == 1, 1 - cal_probs, cal_probs)
     n = len(scores)
     rank = int(np.ceil((n + 1) * (1 - alpha)))
-    rank = min(max(rank, 1), n)
-    return float(np.sort(scores)[rank - 1])
+    if rank > n:
+        return float("inf")
+    return float(np.sort(scores)[max(rank, 1) - 1])
 
 
 def prediction_sets(probs, q):

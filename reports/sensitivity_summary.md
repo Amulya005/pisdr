@@ -4,18 +4,29 @@ Full grid: reports/sensitivity_analysis.csv (36 scenarios x 5 policies).
 All runs use the leakage-safe temporal model (test PR-AUC 0.810) and
 conformal threshold calibrated only on the calibration period.
 
-## RQ1 - random vs temporal validation on real data: NOT supported here
-- Random-trained model, evaluated on a random test slice: PR-AUC 0.822
-- The SAME model evaluated on the future temporal test: PR-AUC 0.824
+## RQ1 - random vs temporal validation on real data (CORRECTED Nov 26, 2026)
+Correction: the first version of this comparison permuted the FULL
+dataframe for the random split, so the random model trained on
+test-period rows and the figures below replace the contaminated ones
+(random-test 0.822 / temporal-test 0.824) originally reported here.
+The corrected design trains BOTH models only on pre-test information
+(the random split is drawn from the train+calibration pool, same
+training size as the temporal model) and evaluates on the same
+untouched future test period.
+- Random-trained model, evaluated on a random pre-test slice: PR-AUC 0.828
+- The SAME model evaluated on the future temporal test: PR-AUC 0.811
 - Temporal-trained model on the temporal test: PR-AUC 0.810
-There is no meaningful random-split inflation on DataCo. The drift numbers
+Measured cleanly, a small random-split inflation exists (~0.017 PR-AUC,
+~2% relative) - the direction H1 predicts, but far below the >=10%
+relative gap H1 hypothesized, and random vs temporal TRAINING makes no
+difference on the future test (0.811 vs 0.810). The drift numbers
 explain why: PSI train->test is negligible for every numeric feature
-(0.000-0.065) and for predicted risk (0.009). DataCo is temporally almost
-homogeneous, so random and temporal evaluation coincide and conformal
-coverage survives (0.897 vs 0.90 nominal). H1 remains plausible for
-genuinely shifting streams - the synthetic demo, which injects a real
-disruption window, is where split choice matters - but on this dataset
-H1 is not supported. Reported as measured, not as hoped.
+(0.000-0.065) and for predicted risk (0.009). DataCo is temporally
+almost homogeneous, so evaluation choice matters little and conformal
+coverage survives (0.897 vs 0.90 nominal). H1's strong form is not
+supported on this dataset; it remains plausible for genuinely shifting
+streams - the synthetic demo, which injects a real disruption window,
+is where split choice matters. Reported as measured, not as hoped.
 
 ## Lot-level policy comparison (8,335 lots; median 6 units; lot = any
 constituent order late, so lot late rate is 0.82; 79.7% of lots contain at
@@ -46,9 +57,28 @@ than aggregated from order-level sets. These are design changes for a
 next stage; no parameter was tuned after seeing these results.
 
 ## Hypothesis status after this stage
-- H1 (random splits overstate performance): NOT supported on DataCo
-  (gap ~0.002 PR-AUC); supported only in the synthetic shift demo.
+- H1 (random splits overstate performance): strong form NOT supported
+  on DataCo (corrected gap ~0.017 PR-AUC, ~2% relative, vs the >=10%
+  hypothesized); supported only in the synthetic shift demo.
 - H2 (uncertainty-aware policy lowers regret at equal service level):
   REJECTED on real lots under current definitions (0/36 scenarios).
 - H3 (simulator impact ranking diverges from classifier ranking): untested.
 - H4/H5: partially exercised via the grid; no dominance claim survives.
+
+## Corrective fixes applied Nov 26, 2026 (second review round)
+- Issue 1 (RQ1 leakage): fixed as described above; this section corrected.
+- Issue 3 (conformal edge case): conformal_threshold now returns inf when
+  the required rank exceeds the calibration size (standard split-conformal
+  convention) instead of clipping to n; edge test added. No effect on the
+  real run (calibration n = 36,104).
+- Issue 4 (ECE boundary): the first ECE bin now includes p == 0.0 (it was
+  silently dropped; a discriminating probe returned 0.0 where the true
+  ECE is 1.0). Boundary tests added for p = 0 and p = 1. No effect on the
+  reported ECE (0.011): the model emits no exact-0.0 probabilities here.
+- Issue 5 (lot dependence): aggregate_lots now supports method="max"
+  (perfect positive dependence, the Frechet lower bound) alongside the
+  independence baseline, with a test; the two bracket the dependence
+  range. Correlated-event simulation remains future work.
+- Issue 6 (dashboard): the dashboard now discovers the real-DataCo and
+  synthetic-demo reports separately, labels them, and defaults to the
+  real one.

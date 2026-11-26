@@ -54,7 +54,7 @@ def simulate_impacts(df, expedite_cost=180.0, expedited_mask=None, **kw):
                          "cost": cost}, index=df.index)
 
 
-def aggregate_lots(frame, prob_col="p_late"):
+def aggregate_lots(frame, prob_col="p_late", method="independence"):
     """Aggregate an order stream into replenishment lots.
 
     Real order data (DataCo) arrives as many small orders; the simulator's
@@ -63,8 +63,11 @@ def aggregate_lots(frame, prob_col="p_late"):
       units          = sum of Order Item Quantity
       scheduled_days = max scheduled days among its orders
       late (actual)  = 1 if ANY constituent order was actually late
-      p_late         = 1 - prod(1 - p_i): probability at least one order in
-                       the lot is late, under conditional independence
+      p_late         = probability at least one order in the lot is late:
+                       method="independence" -> 1 - prod(1 - p_i);
+                       method="max" -> max p_i (perfect positive dependence,
+                       the Frechet lower bound). Both are reported so the
+                       dependence assumption is explicit, never hidden.
     This is a modeling definition, stated here so results can be challenged.
     """
     f = frame.copy()
@@ -76,7 +79,19 @@ def aggregate_lots(frame, prob_col="p_late"):
         late=("late_delivery_risk", "max"),
         n_orders=("late_delivery_risk", "size"),
     ).reset_index()
-    p = grouped[prob_col].apply(lambda s: 1.0 - float(np.prod(1.0 - s.to_numpy())))
+    if method == "independence":
+        # P(at least one late) under conditional independence of orders.
+        p = grouped[prob_col].apply(
+            lambda s: 1.0 - float(np.prod(1.0 - s.to_numpy())))
+    elif method == "max":
+        # Perfect positive dependence bound (Frechet lower bound for the
+        # union): if one shared disruption drives all orders in the lot,
+        # P(at least one late) = max p_i. Independence and max bracket the
+        # plausible dependence range together with the union bound
+        # min(1, sum p_i); correlated-event simulation is future work.
+        p = grouped[prob_col].max()
+    else:
+        raise ValueError(f"unknown aggregation method: {method}")
     lots[prob_col] = p.to_numpy()
     if "set_type" in f.columns:
         rank = {"confident": 0, "empty": 1, "uncertain": 2}

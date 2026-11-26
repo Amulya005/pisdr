@@ -115,3 +115,43 @@ def test_lot_aggregation():
     assert first["late"] == 1 and first["n_orders"] == 2
     assert abs(first["p_late"] - 0.75) < 1e-9  # 1 - (0.5 * 0.5)
     assert first["set_type"] == "uncertain"  # worst constituent set wins
+
+
+def test_conformal_threshold_infinite_when_rank_exceeds_n():
+    import numpy as np
+    from pisdr.uncertainty import conformal_threshold, classify_sets, empirical_coverage
+    probs = np.array([0.9, 0.8, 0.7, 0.6, 0.5])
+    labels = np.array([1, 1, 0, 1, 0])
+    q = conformal_threshold(probs, labels, alpha=0.01)  # rank 6 > n 5
+    assert q == float("inf")
+    # With q = inf every set includes both classes -> all uncertain, coverage 1.
+    assert (classify_sets(probs, q) == "uncertain").all()
+    assert empirical_coverage(probs, labels, q) == 1.0
+
+
+def test_ece_probability_boundaries():
+    import numpy as np
+    from pisdr.evaluate import expected_calibration_error
+    # p == 0 must be counted: worst possible calibration error is 1.0, not 0.
+    assert expected_calibration_error(np.ones(10), np.zeros(10)) == 1.0
+    assert expected_calibration_error(np.zeros(10), np.zeros(10)) == 0.0
+    # p == 1 handled: perfect when outcomes are 1, worst when outcomes are 0.
+    assert expected_calibration_error(np.ones(10), np.ones(10)) == 0.0
+    assert expected_calibration_error(np.zeros(10), np.ones(10)) == 1.0
+
+
+def test_lot_aggregation_max_method():
+    import pandas as pd
+    from pisdr.simulator import aggregate_lots
+    f = pd.DataFrame({
+        "order_date": pd.to_datetime(["2020-01-01", "2020-01-01"]),
+        "Order Region": ["A", "A"], "Category Name": ["X", "X"],
+        "Order Item Quantity": [2, 3],
+        "Days for shipment (scheduled)": [2, 4],
+        "late_delivery_risk": [0, 1], "p_late": [0.5, 0.5],
+    })
+    lots_max = aggregate_lots(f, method="max")
+    lots_ind = aggregate_lots(f, method="independence")
+    assert abs(lots_max.iloc[0]["p_late"] - 0.5) < 1e-9   # max p_i
+    assert abs(lots_ind.iloc[0]["p_late"] - 0.75) < 1e-9  # 1 - prod(1 - p_i)
+    assert lots_max.iloc[0]["p_late"] <= lots_ind.iloc[0]["p_late"]

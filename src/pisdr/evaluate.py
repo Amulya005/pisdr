@@ -20,7 +20,11 @@ def expected_calibration_error(y_true, probs, bins=10):
     edges = np.linspace(0, 1, bins + 1)
     ece = 0.0
     for b in range(bins):
-        mask = (probs > edges[b]) & (probs <= edges[b + 1])
+        # First bin is [0, e1] so p == 0.0 is counted; later bins (e_b, e_b+1].
+        if b == 0:
+            mask = (probs >= edges[b]) & (probs <= edges[b + 1])
+        else:
+            mask = (probs > edges[b]) & (probs <= edges[b + 1])
         if mask.sum() > 0:
             ece += mask.mean() * abs(y_true[mask].mean() - probs[mask].mean())
     return float(ece)

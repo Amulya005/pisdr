@@ -48,12 +48,19 @@ def main():
         round(empirical_coverage(p_test, test[TARGET].to_numpy(), q), 3))
 
     # --- RQ1: random-split training, two evaluations ---
+    # The random split is drawn ONLY from the pre-test pool (train +
+    # calibration periods): both approaches train exclusively on
+    # information available before the same untouched future test period.
+    # (An earlier version permuted the full dataframe, letting the random
+    # model train on test-period rows - leakage, corrected Nov 26, 2026.)
+    pre_test = pd.concat([train, cal])
     rng = np.random.RandomState(42)
-    idx = rng.permutation(len(df))
-    n_tr = int(len(df) * 0.55)
-    r_train, r_test = df.iloc[idx[:n_tr]], df.iloc[idx[n_tr:]]
+    idx = rng.permutation(len(pre_test))
+    n_tr = len(train)  # same training size as the temporal model
+    r_train = pre_test.iloc[idx[:n_tr]]
+    r_test = pre_test.iloc[idx[n_tr:]]
     r_model = make_model().fit(r_train[FEATURES_DATACO], r_train[TARGET])
-    log("RQ1 random-trained PR-AUC on RANDOM test:",
+    log("RQ1 random-trained PR-AUC on RANDOM (pre-test) test:",
         classification_metrics(r_test[TARGET],
             r_model.predict_proba(r_test[FEATURES_DATACO])[:, 1])["pr_auc"])
     log("RQ1 random-trained PR-AUC on TEMPORAL test:",

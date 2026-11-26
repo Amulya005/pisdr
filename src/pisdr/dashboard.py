@@ -11,12 +11,26 @@ st.caption("Predictions carry uncertainty intervals; recommendations show the "
            "simulated consequences under stated assumptions, not measured "
            "real-world benefits.")
 
-results_path = st.text_input("Policy comparison results (CSV)", "reports/policy_comparison.csv")
-try:
-    results = pd.read_csv(results_path, index_col=0)
-    st.subheader("Policy comparison (simulated)")
+# Report discovery: real-DataCo results and synthetic-demo results are
+# DIFFERENT artifacts and are never shown under the same label. The real
+# experiment output is the default when it exists.
+from pathlib import Path
+
+KNOWN_REPORTS = {
+    "reports/dataco_policy_comparison.csv":
+        "Real data - DataCo experiment (simulated consequences of real outcomes)",
+    "reports/policy_comparison.csv":
+        "Synthetic demo - simulated data, illustrative only",
+}
+available = {p: label for p, label in KNOWN_REPORTS.items() if Path(p).exists()}
+if available:
+    choice = st.selectbox("Policy comparison report", list(available),
+                          format_func=lambda p: available[p])
+    results = pd.read_csv(choice, index_col=0)
+    st.subheader(available[choice])
     st.dataframe(results)
     st.bar_chart(results["total_cost"])
-except FileNotFoundError:
-    st.info("Run scripts/run_demo.py or the experiment pipeline to generate "
-            "reports/policy_comparison.csv, then reload.")
+else:
+    st.info("No policy comparison report found. Run scripts/run_demo.py "
+            "(synthetic) or scripts/run_dataco_experiment.py (real DataCo) "
+            "first, then reload.")
