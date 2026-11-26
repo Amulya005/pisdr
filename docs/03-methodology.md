@@ -26,3 +26,11 @@ definitions (0/36 scenarios); the cost-minimizing oracle shows uncaptured
 headroom in high-pressure scenarios. The scheduled-days rule never fires
 on DataCo (max scheduled days 4 < rule threshold 7) and is reported as
 equivalent to no-action there.
+
+## Improvement A - subgroup coverage audit (Nov 26, 2026)
+See reports/coverage_audit_summary.md. Overall test coverage 0.897 hides
+subgroup failure: Second Class shipping coverage 0.769 (confident and
+wrong, 2.6% uncertain), p<0.3 risk band 0.606, while Standard Class
+reaches 0.922 only via 77.4% both-class sets. Marginal conformal coverage
+does not imply conditional coverage; group-conditional (Mondrian)
+calibration is the motivated future phase.

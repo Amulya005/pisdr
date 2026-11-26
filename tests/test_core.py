@@ -155,3 +155,27 @@ def test_lot_aggregation_max_method():
     assert abs(lots_max.iloc[0]["p_late"] - 0.5) < 1e-9   # max p_i
     assert abs(lots_ind.iloc[0]["p_late"] - 0.75) < 1e-9  # 1 - prod(1 - p_i)
     assert lots_max.iloc[0]["p_late"] <= lots_ind.iloc[0]["p_late"]
+
+
+def test_wilson_interval_known_values():
+    from pisdr.uncertainty import wilson_interval
+    lo, hi = wilson_interval(90, 100)
+    assert abs(lo - 0.824) < 0.01 and abs(hi - 0.945) < 0.01
+    lo0, hi0 = wilson_interval(0, 0)
+    assert lo0 != lo0  # NaN for empty group
+
+
+def test_coverage_by_group_flags_bad_subgroup():
+    import numpy as np
+    import pandas as pd
+    from pisdr.uncertainty import coverage_by_group
+    # Group A: model certain and right. Group B: labels flipped vs probs,
+    # so coverage collapses there while overall coverage looks middling.
+    frame = pd.DataFrame({"g": ["A"] * 50 + ["B"] * 50})
+    probs = np.array([0.95] * 50 + [0.95] * 50)
+    labels = np.array([1] * 50 + [0] * 50)
+    table = coverage_by_group(frame, "g", probs, labels, q=0.644)
+    a = table[table["group"] == "A"].iloc[0]
+    b = table[table["group"] == "B"].iloc[0]
+    assert a["coverage"] == 1.0 and b["coverage"] == 0.0
+    assert b["ci_excludes_nominal"]
