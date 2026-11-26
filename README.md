@@ -27,10 +27,16 @@ simulator. No fabricated observations. Dataset documentation: `docs/` (Stage 1).
 
 ## Status
 Stage 0 complete — research foundation, novelty review, architecture, roadmap.
-Stage 1 complete — core pipeline: temporal/rolling validation, leakage blacklist,
-conformal uncertainty, PSI drift, impact simulator, policy comparison, API,
-dashboard, tests (6 passing). Demo on synthetic data: scripts/run_demo.py.
-Next — real-data run on DataCo (download to data/raw/, see docs/02).
+Stage 1 complete, then CORRECTED after an external methodological review
+(Nov 26, 2026): three-period train/calibration/test evaluation (the first
+demo calibrated conformal on its test set — fixed), finite-sample conformal
+with empty-set reporting, a genuinely cost-minimizing oracle, pinned
+dependencies (requirements-lock.txt), and full citations.
+Real-data run complete on DataCo: temporal test PR-AUC 0.810, conformal
+empirical coverage 0.897 vs 0.90 nominal (reports/dataco_experiment_summary.md).
+The policy comparison on real data exposed a simulator parameter mismatch
+(documented in the same report); the defined next step is lot aggregation +
+sensitivity analysis. 11 tests passing.
 
 ## Roadmap (12 weeks)
 W1 literature/repo/data · W2 ETL + leakage audit · W3 baselines + temporal splits ·

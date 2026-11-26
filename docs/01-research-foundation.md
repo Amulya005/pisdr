@@ -75,3 +75,36 @@ drift may make models look weak (a finding, not a failure); scope creep (GNN, LL
 forecasting, causal claims are parked as stretch goals); calibration degrades under
 shift (H4 tests graceful decision degradation); cloud cost (free-tier-first, teardown
 after demos).
+
+## References (full citations)
+1. Turtel, B., Wilczewski, P., & Skotheim, K. (2026). *Forecasting Supply Chain
+   Disruptions with Foresight Learning.* arXiv. Lightning Rod Labs.
+   https://arxiv.org/html/2604.01298v1 - evaluation dataset:
+   https://huggingface.co/datasets/LightningRodLabs/supply-chain-predictions
+2. Ansari, M. E., et al. (2026). AI-driven predictive analytics for supply chain
+   disruption and resilience in engineering management (UQ-CRGATNet).
+   *Frontiers in Artificial Intelligence*, 9, 1928679.
+   https://doi.org/10.3389/frai.2026.1928679
+3. Mannava, R., Nadella, J., Bhimireddy, G. R., & Teja, B. R. (2025). Graph
+   neural network-based prediction of cascading supply chain disruptions using
+   real-time logistics and supplier risk data. *Journal of Financial and
+   Computational Applications in Innovation* (RePEc: alk/fcsai0/v4y2025i1id13736).
+   https://ideas.repec.org/a/alk/fcsai0/v4y2025i1id13736.html
+4. Li, X., Krivtsov, V., Pan, C., Nassehi, A., Gao, R. X., & Ivanov, D. (2025).
+   End-to-end supply chain resilience management using deep learning, survival
+   analysis, and explainable artificial intelligence. *International Journal of
+   Production Research*, 63(3), 1174-1202.
+   https://doi.org/10.1080/00207543.2024.2367685
+5. Commercial platforms (vendor documentation and independent comparisons,
+   accessed Nov 2026): Everstream Analytics (everstream.ai), Resilinc
+   (resilinc.com), Interos (interos.ai). Comparison sources:
+   https://rankite.com/blog/best-supply-chain-risk-management-software and
+   https://mitratech.com/resource-hub/blog/10-best-platforms-for-managing-supplier-risk-throughout-the-lifecycle-in-2026/
+
+## Evidence status for the gap claim
+The gap in this document is a PLAUSIBLE, literature-informed claim, not a
+proven one: the five approaches above were reviewed at abstract/full-text
+level as available, and none publishes a reproducible decision-regret
+evaluation of recovery policies under temporal shift. A systematic review
+(search protocol, inclusion criteria, screening log) remains future work and
+is required before the gap is stated as established in any external venue.

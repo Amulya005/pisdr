@@ -46,7 +46,10 @@ def make_synthetic_shipments(n=4000, seed=42, start="2022-01-01", periods_days=7
     dates = pd.to_datetime(start) + pd.to_timedelta(rng.integers(0, periods_days, n), unit="D")
     scheduled = rng.integers(1, 10, n)
     congestion = np.clip(rng.normal(0.45, 0.18, n), 0, 1)
-    disruption = ((dates >= "2023-01-01") & (dates <= "2023-03-31")).astype(float)
+    # The disruption window sits in the FINAL part of the timeline so it lands
+    # in the temporal test period: the deployment-realistic case where shift
+    # appears only in the future (see scripts/run_demo.py coverage report).
+    disruption = ((dates >= "2023-07-01") & (dates <= "2023-09-30")).astype(float)
     congestion = np.clip(congestion + 0.25 * disruption, 0, 1)
     logit = -2.2 + 0.28 * scheduled + 2.4 * congestion + 0.9 * disruption \
         + rng.normal(0, 0.5, n)
@@ -61,3 +64,33 @@ def make_synthetic_shipments(n=4000, seed=42, start="2022-01-01", periods_days=7
         "units": rng.integers(1, 40, n),
         TARGET: late,
     }).sort_values("order_date").reset_index(drop=True)
+
+
+# Personally identifiable / credential columns present in the raw DataCo file.
+# They are dropped at load time and NEVER used as features or stored in
+# processed outputs (see the data-quality audit, reports/dataco_quality_audit.md).
+PII_COLUMNS = [
+    "Customer Email", "Customer Password", "Customer Fname", "Customer Lname",
+    "Customer Street", "Customer Zipcode", "Product Image",
+    "Order Customer Id", "Customer Id",
+]
+
+NUMERIC_COERCIONS = [
+    "Days for shipment (scheduled)", "Days for shipping (real)",
+    "Order Item Quantity", "Order Item Discount Rate", "Sales",
+    "Order Item Total", "Order Item Profit Ratio", "Benefit per order",
+    "Product Price", "Order Item Product Price",
+]
+
+
+def clean_dataco(df):
+    """Reproducible cleaning for DataCo (each step logged in the audit):
+    drop PII columns, coerce numerics, drop exact duplicate rows, and keep
+    only rows with a parseable order date and a valid target."""
+    df = df.drop(columns=[c for c in PII_COLUMNS if c in df.columns])
+    for col in NUMERIC_COERCIONS:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    df = df.drop_duplicates()
+    df = df.dropna(subset=["order_date", TARGET])
+    return df.reset_index(drop=True)

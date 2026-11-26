@@ -20,3 +20,16 @@ data-generating process. Synthetic results are never reported as real.
 ## External indicators (planned joins)
 NY Fed GSCPI (monthly pressure index), GDELT events, NOAA Storm Events -
 joined on date/region only with values published before the prediction date.
+
+## Measured audit headline (reports/dataco_quality_audit.md)
+180,519 rows x 53 columns; 0 exact duplicates; all order dates parse
+(2015-01-01 to 2018-01-31); target balance 54.8% late; Product Description
+100% missing; Order Zipcode 86.2% missing; 9,737 rows with scheduled days = 0;
+9 PII/credential columns dropped at load (incl. plaintext Customer Password).
+
+## Real feature set (implemented in pisdr.features)
+Numeric: Days for shipment (scheduled), Order Item Quantity, Order Item
+Discount Rate, Order Item Total, Product Price, order month, order weekday.
+Categorical (one-hot): Type, Shipping Mode, Customer Segment, Market,
+Order Region, Category Name, Department Name. Exclusions with reasons are in
+pisdr.features.EXCLUDED_DATACO.
