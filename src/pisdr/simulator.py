@@ -100,3 +100,31 @@ def aggregate_lots(frame, prob_col="p_late", method="independence"):
         lots["set_type"] = worst.to_numpy()
     lots = lots.rename(columns={"order_day": "order_date"})
     return lots.sort_values("order_date").reset_index(drop=True)
+
+
+def copula_any_late_probs(frame, rho=0.5, sims=200, seed=42, prob_col="p_late"):
+    """Monte-Carlo P(at least one order in the lot is late) under a
+    Gaussian-copula dependence model (Improvement C): each order's latent
+    variable shares a lot-level factor with weight sqrt(rho), so rho = 0
+    reproduces independence and rho -> 1 approaches the max bound.
+    Returns a dict keyed by the lot key (order day, region, category) -
+    align by key, never by position.
+    Simulation only - an estimate under a STATED dependence assumption,
+    not a measured quantity."""
+    from scipy.stats import norm
+    rng = np.random.default_rng(seed)
+    keys = list(zip(pd.to_datetime(frame["order_date"]).dt.date,
+                    frame["Order Region"], frame["Category Name"]))
+    lots = {}
+    for i, k in enumerate(keys):
+        lots.setdefault(k, []).append(i)
+    p = frame[prob_col].to_numpy(dtype=float)
+    estimates = {}
+    for k, idxs in lots.items():
+        idxs = np.asarray(idxs)
+        z = rng.standard_normal((sims, 1))
+        e = rng.standard_normal((sims, len(idxs)))
+        u = norm.cdf(np.sqrt(rho) * z + np.sqrt(1 - rho) * e)
+        late = u < p[idxs]
+        estimates[k] = float(late.any(axis=1).mean())
+    return estimates

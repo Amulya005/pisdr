@@ -179,3 +179,23 @@ def test_coverage_by_group_flags_bad_subgroup():
     b = table[table["group"] == "B"].iloc[0]
     assert a["coverage"] == 1.0 and b["coverage"] == 0.0
     assert b["ci_excludes_nominal"]
+
+
+def test_copula_aggregation_bounds():
+    import numpy as np
+    import pandas as pd
+    from pisdr.simulator import copula_any_late_probs, aggregate_lots
+    f = pd.DataFrame({
+        "order_date": pd.to_datetime(["2020-01-01"] * 4),
+        "Order Region": ["A"] * 4, "Category Name": ["X"] * 4,
+        "Order Item Quantity": [1] * 4,
+        "Days for shipment (scheduled)": [2] * 4,
+        "late_delivery_risk": [0, 1, 0, 0], "p_late": [0.5, 0.5, 0.5, 0.5],
+    })
+    key = (pd.Timestamp("2020-01-01").date(), "A", "X")
+    ind = aggregate_lots(f, method="independence").iloc[0]["p_late"]  # 1-.5^4=.9375
+    rho0 = copula_any_late_probs(f, rho=0.0, sims=4000)[key]
+    rho9 = copula_any_late_probs(f, rho=0.9, sims=4000)[key]
+    assert abs(rho0 - ind) < 0.03          # rho=0 reproduces independence
+    assert rho9 < rho0 - 0.15              # strong dependence -> toward max (0.5)
+    assert rho9 >= 0.5 - 0.03              # never below the max bound (MC tol)
