@@ -1,0 +1,15 @@
+,train,calibration,test,rank_train,rank_test
+Days for shipment (scheduled),0.0752,0.063,0.0653,2.0,2.0
+Order Item Quantity,0.0011,0.0003,0.0001,14.0,11.0
+Order Item Discount Rate,0.0052,-0.0001,0.001,9.0,6.0
+Order Item Total,0.008,-0.0013,-0.0008,8.0,13.0
+Product Price,0.0035,-0.0005,-0.001,11.0,14.0
+month,0.0134,0.0008,0.0003,6.0,8.0
+dow,0.0139,0.0002,0.001,5.0,5.0
+Type,0.0302,0.0191,0.0214,3.0,3.0
+Shipping Mode,0.1375,0.1288,0.1302,1.0,1.0
+Customer Segment,0.012,0.0003,0.0021,7.0,4.0
+Market,0.0015,-0.0,0.0002,13.0,10.0
+Order Region,0.0207,0.0001,0.0008,4.0,7.0
+Category Name,0.0048,0.0006,0.0001,10.0,12.0
+Department Name,0.0015,0.0,0.0002,12.0,9.0
