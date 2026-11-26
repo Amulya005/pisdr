@@ -17,3 +17,12 @@
    made from observational data; negative results are reported.
 6. Reproducibility: every experiment runs from configs/config.yaml with a
    fixed seed; environment is pinned by requirements.txt.
+
+## Findings on real data (Nov 26, 2026)
+See reports/dataco_experiment_summary.md and reports/sensitivity_summary.md.
+Headlines: H1 not supported on DataCo (negligible temporal drift, PSI
+<= 0.065); H2 rejected at lot level under threshold/set-membership policy
+definitions (0/36 scenarios); the cost-minimizing oracle shows uncaptured
+headroom in high-pressure scenarios. The scheduled-days rule never fires
+on DataCo (max scheduled days 4 < rule threshold 7) and is reported as
+equivalent to no-action there.

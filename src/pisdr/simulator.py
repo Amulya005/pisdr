@@ -52,3 +52,36 @@ def simulate_impacts(df, expedite_cost=180.0, expedited_mask=None, **kw):
     return pd.DataFrame({"late": out["late"], "expedited": expedited_mask,
                          "delay_days": out["delay_days"], "stockout": stockout,
                          "cost": cost}, index=df.index)
+
+
+def aggregate_lots(frame, prob_col="p_late"):
+    """Aggregate an order stream into replenishment lots.
+
+    Real order data (DataCo) arrives as many small orders; the simulator's
+    demand parameters describe a stocking point replenished in LOTS. A lot =
+    all orders sharing (order day, Order Region, Category Name). For a lot:
+      units          = sum of Order Item Quantity
+      scheduled_days = max scheduled days among its orders
+      late (actual)  = 1 if ANY constituent order was actually late
+      p_late         = 1 - prod(1 - p_i): probability at least one order in
+                       the lot is late, under conditional independence
+    This is a modeling definition, stated here so results can be challenged.
+    """
+    f = frame.copy()
+    f["order_day"] = pd.to_datetime(f["order_date"]).dt.floor("D")
+    grouped = f.groupby(["order_day", "Order Region", "Category Name"])
+    lots = grouped.agg(
+        units=("Order Item Quantity", "sum"),
+        scheduled_days=("Days for shipment (scheduled)", "max"),
+        late=("late_delivery_risk", "max"),
+        n_orders=("late_delivery_risk", "size"),
+    ).reset_index()
+    p = grouped[prob_col].apply(lambda s: 1.0 - float(np.prod(1.0 - s.to_numpy())))
+    lots[prob_col] = p.to_numpy()
+    if "set_type" in f.columns:
+        rank = {"confident": 0, "empty": 1, "uncertain": 2}
+        worst = grouped["set_type"].apply(
+            lambda s: max(s, key=lambda v: rank[v]))
+        lots["set_type"] = worst.to_numpy()
+    lots = lots.rename(columns={"order_day": "order_date"})
+    return lots.sort_values("order_date").reset_index(drop=True)

@@ -93,3 +93,25 @@ def test_oracle_is_cost_minimal_against_all_policies():
     for name, res in results.items():
         assert res["total_cost"] >= oracle_cost - 1e-9, name
         assert abs(res["decision_regret"] - (res["total_cost"] - oracle_cost)) < 1e-6
+
+
+def test_lot_aggregation():
+    import pandas as pd
+    from pisdr.simulator import aggregate_lots
+    f = pd.DataFrame({
+        "order_date": pd.to_datetime(["2020-01-01", "2020-01-01", "2020-01-02"]),
+        "Order Region": ["A", "A", "A"],
+        "Category Name": ["X", "X", "X"],
+        "Order Item Quantity": [2, 3, 5],
+        "Days for shipment (scheduled)": [2, 4, 1],
+        "late_delivery_risk": [0, 1, 0],
+        "p_late": [0.5, 0.5, 0.2],
+        "set_type": ["confident", "uncertain", "confident"],
+    })
+    lots = aggregate_lots(f)
+    assert len(lots) == 2
+    first = lots.iloc[0]
+    assert first["units"] == 5 and first["scheduled_days"] == 4
+    assert first["late"] == 1 and first["n_orders"] == 2
+    assert abs(first["p_late"] - 0.75) < 1e-9  # 1 - (0.5 * 0.5)
+    assert first["set_type"] == "uncertain"  # worst constituent set wins
