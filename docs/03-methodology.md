@@ -34,3 +34,16 @@ wrong, 2.6% uncertain), p<0.3 risk band 0.606, while Standard Class
 reaches 0.922 only via 77.4% both-class sets. Marginal conformal coverage
 does not imply conditional coverage; group-conditional (Mondrian)
 calibration is the motivated future phase.
+
+## Improvements B-J (Nov 26, 2026)
+See reports/improvements_summary.md for the consolidated results and
+docs/04-causal-assessment.md for the Improvement G verdict (causal
+claims not defensible on these data; none are made). Key additions:
+data-quality stress tests (shipping-mode mislabels are the fragile
+input), Gaussian-copula dependence-aware lot aggregation (rankings
+unchanged), policy regret and value-of-information analysis (model
+information has positive value in 7/36 scenarios), recovery-tail
+simulation, permutation-importance stability (top drivers stable, the
+rest is noise), severe-disruption testing (coverage holds by vagueness
+while calibration degrades), and an Olist external replication
+(coverage 0.960 - over-coverage at an 8.1% base rate).

@@ -33,7 +33,7 @@ scenarios on replenishment lots (reports/sensitivity_summary.md) produced
 honest negative results: no random-split inflation on DataCo (the dataset
 is temporally near-homogeneous, PSI <= 0.065) and the uncertainty-aware
 policy did not beat point prediction at lot level (0/36 scenarios).
-15 tests passing. Defined future work: an expected-cost decision policy
+18 tests passing. Defined future work: an expected-cost decision policy
 and lot-level probability modeling.
 
 ## Roadmap (12 weeks)
