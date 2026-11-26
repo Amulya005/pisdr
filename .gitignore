@@ -11,3 +11,5 @@ data/processed/*
 !configs/*.csv
 .ipynb_checkpoints/
 .DS_Store
+
+models/

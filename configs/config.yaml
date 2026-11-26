@@ -1,0 +1,17 @@
+experiment:
+  seed: 42
+  test_frac: 0.25
+  rolling_splits: 3
+model:
+  threshold: 0.5
+  conformal_alpha: 0.10
+simulator:
+  daily_demand: 25.0
+  safety_stock: 120.0
+  delay_days: 6
+  expedite_cost: 180.0
+  stockout_cost_per_unit_day: 4.0
+policies:
+  rule_min_days: 7
+data:
+  dataco_path: data/raw/DataCoSupplyChainDataset.csv

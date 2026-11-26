@@ -1,0 +1,19 @@
+# Methodology
+
+1. Validation: temporal and rolling-origin splits for all headline results.
+   Random splits are computed only to quantify their overstatement (RQ1).
+2. Uncertainty: split-conformal prediction with empirical coverage reported
+   next to every interval claim; calibration error (ECE) and Brier score
+   reported alongside discrimination (PR-AUC).
+3. Shift: performance is reported separately for the injected disruption
+   window and normal periods; PSI drift scores accompany feature drift claims.
+4. Decisions: policies are compared in the transparent simulator
+   (src/pisdr/simulator.py) against rule-based and oracle references;
+   decision regret is the primary decision metric. Simulator parameters live
+   in configs/config.yaml; sensitivity analysis varies them before any
+   conclusion is drawn.
+5. Honesty rules: real and synthetic results are never merged; simulated
+   benefits are never described as real-world benefits; no causal claims are
+   made from observational data; negative results are reported.
+6. Reproducibility: every experiment runs from configs/config.yaml with a
+   fixed seed; environment is pinned by requirements.txt.
