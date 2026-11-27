@@ -12,23 +12,36 @@ import numpy as np
 
 
 def temporal_split(df, date_col="order_date", test_frac=0.25):
-    """Two-way temporal split (kept for simple comparisons)."""
+    """Two-way temporal split (kept for simple comparisons).
+
+    DATE-CUT, not row-position: the boundary is a timestamp value, so
+    rows sharing the exact boundary timestamp never straddle the split
+    (they all land on the later side). max(train date) < min(test date)
+    holds strictly."""
     df = df.sort_values(date_col).reset_index(drop=True)
     cut = int(len(df) * (1 - test_frac))
-    return df.iloc[:cut].copy(), df.iloc[cut:].copy()
+    boundary = df[date_col].iloc[cut]
+    train = df[df[date_col] < boundary].copy()
+    test = df[df[date_col] >= boundary].copy()
+    return train, test
 
 
 def temporal_train_cal_test(df, date_col="order_date", cal_frac=0.20, test_frac=0.25):
     """Three-way temporal split: earliest block trains, middle block
-    calibrates, latest block is the final test. The three periods are
-    disjoint and strictly time-ordered."""
+    calibrates, latest block is the final test. DATE-CUT boundaries:
+    no timestamp value appears on both sides of a boundary, so the
+    periods are disjoint and strictly time-ordered
+    (max(train) < min(cal), max(cal) < min(test)). Block sizes are
+    therefore approximate rather than exact fractions."""
     df = df.sort_values(date_col).reset_index(drop=True)
     n = len(df)
     test_start = int(n * (1 - test_frac))
     cal_start = int(test_start * (1 - cal_frac / (1 - test_frac)))
-    train = df.iloc[:cal_start].copy()
-    cal = df.iloc[cal_start:test_start].copy()
-    test = df.iloc[test_start:].copy()
+    cal_boundary = df[date_col].iloc[cal_start]
+    test_boundary = df[date_col].iloc[test_start]
+    train = df[df[date_col] < cal_boundary].copy()
+    cal = df[(df[date_col] >= cal_boundary) & (df[date_col] < test_boundary)].copy()
+    test = df[df[date_col] >= test_boundary].copy()
     return train, cal, test
 
 

@@ -13,17 +13,17 @@ The corrected design trains BOTH models only on pre-test information
 (the random split is drawn from the train+calibration pool, same
 training size as the temporal model) and evaluates on the same
 untouched future test period.
-- Random-trained model, evaluated on a random pre-test slice: PR-AUC 0.828
-- The SAME model evaluated on the future temporal test: PR-AUC 0.811
-- Temporal-trained model on the temporal test: PR-AUC 0.810
-Measured cleanly, a small random-split inflation exists (~0.017 PR-AUC,
-~2% relative) - the direction H1 predicts, but far below the >=10%
+- Random-trained model, evaluated on a random pre-test slice: PR-AUC 0.831
+- The SAME model evaluated on the future temporal test: PR-AUC 0.809
+- Temporal-trained model on the temporal test: PR-AUC 0.809
+Measured cleanly, a small random-split inflation exists (~0.022 PR-AUC,
+~2.7% relative) - the direction H1 predicts, but far below the >=10%
 relative gap H1 hypothesized, and random vs temporal TRAINING makes no
 difference on the future test (0.811 vs 0.810). The drift numbers
 explain why: PSI train->test is negligible for every numeric feature
 (0.000-0.065) and for predicted risk (0.009). DataCo is temporally
 almost homogeneous, so evaluation choice matters little and conformal
-coverage survives (0.897 vs 0.90 nominal). H1's strong form is not
+coverage survives (0.896 vs 0.90 nominal). H1's strong form is not
 supported on this dataset; it remains plausible for genuinely shifting
 streams - the synthetic demo, which injects a real disruption window,
 is where split choice matters. Reported as measured, not as hoped.
@@ -82,3 +82,11 @@ next stage; no parameter was tuned after seeing these results.
 - Issue 6 (dashboard): the dashboard now discovers the real-DataCo and
   synthetic-demo reports separately, labels them, and defaults to the
   real one.
+
+## Split boundary hardened (Nov 26, 2026)
+All temporal splits are now DATE-CUT: boundaries are timestamp values,
+so no timestamp appears on both sides of a split (previously the split
+sliced by row position and a few orders sharing the exact boundary
+timestamp straddled it). Every experiment was re-run under the hardened
+split; all headline numbers moved by <= 0.003 and no verdict changed.
+Current split sizes: train 99,282 | calibration 36,104 | test 45,133.

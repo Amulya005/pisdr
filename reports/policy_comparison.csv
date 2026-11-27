@@ -1,0 +1,6 @@
+,total_cost,stockouts,expedited,service_level,decision_regret
+rule_based,92924.0,132.0,325.0,0.868,64760.0
+point_prediction,131012.0,59.0,635.0,0.9410000000000001,102848.0
+uncertainty_aware,170152.0,10.0,928.0,0.99,141988.0
+oracle,28164.0,136.0,85.0,0.864,0.0
+no_action,61392.0,221.0,0.0,0.779,33228.0

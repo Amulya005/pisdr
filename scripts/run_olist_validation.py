@@ -67,6 +67,15 @@ def main():
     cat = ["customer_state", "product_category_name"]
     X, y = df[num + cat], df["late"].to_numpy()
     n = len(df); n_tr, n_cal = int(n * 0.55), int(n * 0.75)
+    # Date-cut boundaries (same rule as pisdr.splits): no purchase
+    # timestamp appears on both sides of a boundary.
+    t_tr = df["order_purchase_timestamp"].iloc[n_tr]
+    t_cal = df["order_purchase_timestamp"].iloc[n_cal]
+    itr = np.where((df["order_purchase_timestamp"] < t_tr).to_numpy())[0]
+    ical = np.where(((df["order_purchase_timestamp"] >= t_tr)
+                     & (df["order_purchase_timestamp"] < t_cal)).to_numpy())[0]
+    ite = np.where((df["order_purchase_timestamp"] >= t_cal).to_numpy())[0]
+    n_tr, n_cal = len(itr), len(itr) + len(ical)
     prep = ColumnTransformer([
         ("num", SimpleImputer(strategy="median"), num),
         ("cat", Pipeline([("imp", SimpleImputer(strategy="most_frequent")),

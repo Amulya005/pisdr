@@ -1,0 +1,76 @@
+dimension,group,n,coverage,nominal,gap,ci_lo,ci_hi,ci_excludes_nominal,mean_set_size,pct_uncertain,pct_empty
+time_window,W1 2017-03-01..2017-05-05,11284,0.893,0.9,-0.007,0.8872,0.8986,True,1.517,0.5166,0.0
+time_window,W2 2017-05-05..2017-07-11,11283,0.8935,0.9,-0.0065,0.8876,0.899,True,1.517,0.5166,0.0
+time_window,W3 2017-07-11..2017-09-15,11283,0.8943,0.9,-0.0057,0.8885,0.8998,True,1.502,0.5019,0.0
+time_window,W4 2017-09-15..2018-01-31,11283,0.9046,0.9,0.0046,0.8991,0.9099,False,1.531,0.5308,0.0
+Shipping Mode,Standard Class,26950,0.9207,0.9,0.0207,0.9174,0.9239,True,1.773,0.7728,0.0
+Shipping Mode,Second Class,8805,0.7681,0.9,-0.1319,0.7592,0.7768,True,1.027,0.0268,0.0
+Shipping Mode,First Class,6960,0.9499,0.9,0.0499,0.9445,0.9547,True,1.017,0.0168,0.0
+Shipping Mode,Same Day,2418,0.938,0.9,0.038,0.9276,0.9469,True,1.88,0.8805,0.0
+Market,Europe,20903,0.8947,0.9,-0.0053,0.8905,0.8988,True,1.505,0.5052,0.0
+Market,LATAM,18610,0.8931,0.9,-0.0069,0.8885,0.8974,True,1.519,0.5188,0.0
+Market,Pacific Asia,5620,0.9133,0.9,0.0133,0.9057,0.9204,True,1.551,0.5509,0.0
+Order Region,Western Europe,12351,0.9059,0.9,0.0059,0.9006,0.9109,True,1.531,0.5315,0.0
+Order Region,Central America,10408,0.8899,0.9,-0.0101,0.8837,0.8958,True,1.518,0.5178,0.0
+Order Region,South America,5278,0.8966,0.9,-0.0034,0.888,0.9045,False,1.536,0.5362,0.0
+Order Region,Northern Europe,4360,0.8619,0.9,-0.0381,0.8514,0.8718,True,1.455,0.4548,0.0
+Order Region,Southern Europe,4192,0.8958,0.9,-0.0042,0.8861,0.9046,False,1.48,0.4802,0.0
+Order Region,Caribbean,2924,0.8981,0.9,-0.0019,0.8866,0.9085,False,1.491,0.4908,0.0
+Order Region,Southeast Asia,1749,0.9051,0.9,0.0051,0.8905,0.918,False,1.537,0.5369,0.0
+Order Region,Oceania,1436,0.9102,0.9,0.0102,0.8943,0.9239,False,1.535,0.5348,0.0
+Order Region,Eastern Asia,1316,0.9187,0.9,0.0187,0.9027,0.9323,True,1.573,0.5729,0.0
+Order Region,South Asia,1119,0.924,0.9,0.024,0.907,0.9382,True,1.567,0.5675,0.0
+Category Name,Cleats,5180,0.8994,0.9,-0.0006,0.8909,0.9073,False,1.51,0.5104,0.0
+Category Name,Men's Footwear,4879,0.8801,0.9,-0.0199,0.8707,0.8889,True,1.489,0.489,0.0
+Category Name,Women's Apparel,4436,0.8938,0.9,-0.0062,0.8844,0.9026,False,1.499,0.4986,0.0
+Category Name,Indoor/Outdoor Games,4028,0.8883,0.9,-0.0117,0.8782,0.8976,True,1.496,0.4963,0.0
+Category Name,Fishing,3764,0.8964,0.9,-0.0036,0.8862,0.9057,False,1.552,0.5523,0.0
+Category Name,Water Sports,3438,0.9029,0.9,0.0029,0.8925,0.9123,False,1.527,0.5268,0.0
+Category Name,Camping & Hiking,3016,0.8999,0.9,-0.0001,0.8886,0.9101,False,1.533,0.5328,0.0
+Category Name,Cardio Equipment,2565,0.8908,0.9,-0.0092,0.8782,0.9023,False,1.506,0.506,0.0
+Category Name,Shop By Sport,2360,0.9004,0.9,0.0004,0.8877,0.9119,False,1.504,0.5038,0.0
+Category Name,Video Games,838,0.9236,0.9,0.0236,0.9036,0.9397,True,1.6,0.6002,0.0
+Category Name,Children's Clothing,652,0.9156,0.9,0.0156,0.8918,0.9346,False,1.587,0.5874,0.0
+Category Name,Women's Clothing,650,0.9215,0.9,0.0215,0.8983,0.9398,False,1.583,0.5831,0.0
+Category Name,Cameras ,592,0.9139,0.9,0.0139,0.8885,0.9339,False,1.466,0.4662,0.0
+Category Name,Toys,529,0.8355,0.9,-0.0645,0.8016,0.8647,True,1.408,0.4083,0.0
+Category Name,Pet Supplies,492,0.9167,0.9,0.0167,0.8889,0.938,False,1.512,0.5122,0.0
+Category Name,Garden,484,0.9483,0.9,0.0483,0.9249,0.9648,True,1.614,0.6136,0.0
+Category Name,Crafts,484,0.8967,0.9,-0.0033,0.8664,0.9208,False,1.5,0.5,0.0
+Category Name,DVDs,483,0.8861,0.9,-0.0139,0.8547,0.9115,False,1.516,0.5155,0.0
+Category Name,Computers,442,0.9163,0.9,0.0163,0.8867,0.9387,False,1.561,0.5611,0.0
+Category Name,Music,434,0.9355,0.9,0.0355,0.9083,0.955,True,1.59,0.5899,0.0
+Category Name,Consumer Electronics,431,0.9095,0.9,0.0095,0.8787,0.9331,False,1.497,0.4965,0.0
+Category Name,Books ,405,0.916,0.9,0.016,0.885,0.9393,False,1.578,0.5778,0.0
+Category Name,Kids' Golf Clubs,384,0.8932,0.9,-0.0068,0.8584,0.9203,False,1.547,0.5469,0.0
+Category Name,Health and Beauty,362,0.9392,0.9,0.0392,0.9097,0.9595,True,1.58,0.5801,0.0
+Category Name,Sporting Goods,357,0.9216,0.9,0.0216,0.889,0.9452,False,1.571,0.5714,0.0
+Category Name,Men's Golf Clubs,283,0.8799,0.9,-0.0201,0.8368,0.9127,False,1.53,0.53,0.0
+Category Name,Golf Gloves,277,0.9061,0.9,0.0061,0.866,0.9351,False,1.491,0.491,0.0
+Category Name,CDs ,271,0.8303,0.9,-0.0697,0.781,0.8703,True,1.413,0.4133,0.0
+Category Name,Golf Shoes,234,0.8761,0.9,-0.0239,0.8277,0.9123,False,1.436,0.4359,0.0
+Category Name,Men's Clothing,208,0.9327,0.9,0.0327,0.8902,0.9595,False,1.591,0.5913,0.0
+Category Name,Baby ,207,0.8599,0.9,-0.0401,0.806,0.9007,False,1.469,0.4686,0.0
+Category Name,Electronics,191,0.9162,0.9,0.0162,0.8683,0.9478,False,1.555,0.555,0.0
+Category Name,Women's Golf Clubs,181,0.895,0.9,-0.005,0.8419,0.9318,False,1.536,0.5359,0.0
+Category Name,Golf Apparel,158,0.8671,0.9,-0.0329,0.8054,0.9114,False,1.468,0.4684,0.0
+Category Name,Boxing & MMA,151,0.8808,0.9,-0.0192,0.8194,0.9233,False,1.517,0.5166,0.0
+Category Name,Hunting & Shooting,143,0.8112,0.9,-0.0888,0.7392,0.8669,True,1.434,0.4336,0.0
+Category Name,Soccer,138,0.9058,0.9,0.0058,0.8455,0.9441,False,1.58,0.5797,0.0
+Category Name,Trade-In,136,0.7941,0.9,-0.1059,0.7185,0.8535,True,1.353,0.3529,0.0
+Category Name,Accessories,117,0.8718,0.9,-0.0282,0.7992,0.9207,False,1.521,0.5214,0.0
+Category Name,Strength Training,111,0.9189,0.9,0.0189,0.8531,0.9568,False,1.586,0.5856,0.0
+Category Name,Baseball & Softball,109,0.8899,0.9,-0.0101,0.8174,0.9359,False,1.44,0.4404,0.0
+Category Name,Lacrosse,83,0.9277,0.9,0.0277,0.8511,0.9665,False,1.59,0.5904,0.0
+Category Name,Golf Balls,82,0.8171,0.9,-0.0829,0.7199,0.8859,True,1.451,0.4512,0.0
+Category Name,Girls' Apparel,76,0.8816,0.9,-0.0184,0.79,0.9364,False,1.474,0.4737,0.0
+Category Name,As Seen on  TV!,68,0.9412,0.9,0.0412,0.8583,0.9769,False,1.5,0.5,0.0
+Category Name,Basketball,67,0.9403,0.9,0.0403,0.8563,0.9765,False,1.567,0.5672,0.0
+Category Name,Golf Bags & Carts,61,0.9344,0.9,0.0344,0.8432,0.9742,False,1.459,0.459,0.0
+Category Name,Hockey,56,0.9286,0.9,0.0286,0.8302,0.9719,False,1.5,0.5,0.0
+Category Name,Fitness Accessories,24,1.0,0.9,0.1,0.862,1.0,False,1.458,0.4583,0.0
+Category Name,Tennis & Racquet,16,1.0,0.9,0.1,0.8064,1.0,False,1.75,0.75,0.0
+risk_band,0.3-0.5,28285,0.9264,0.9,0.0264,0.9233,0.9294,True,1.791,0.7911,0.0
+risk_band,p>=0.7,14401,0.8581,0.9,-0.0419,0.8523,0.8637,True,1.0,0.0,0.0
+risk_band,0.5-0.7,1957,0.8191,0.9,-0.0809,0.8014,0.8355,True,1.477,0.4768,0.0
+risk_band,p<0.3,490,0.5939,0.9,-0.3061,0.5498,0.6365,True,1.0,0.0,0.0

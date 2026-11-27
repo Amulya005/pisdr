@@ -199,3 +199,16 @@ def test_copula_aggregation_bounds():
     assert abs(rho0 - ind) < 0.03          # rho=0 reproduces independence
     assert rho9 < rho0 - 0.15              # strong dependence -> toward max (0.5)
     assert rho9 >= 0.5 - 0.03              # never below the max bound (MC tol)
+
+
+def test_date_cut_split_never_shares_a_timestamp():
+    import pandas as pd
+    from pisdr.splits import temporal_train_cal_test
+    # 40 rows share ONE timestamp in the middle: a positional split would
+    # straddle it; a date-cut split must not.
+    dates = (["2020-01-01"] * 30 + ["2020-06-01"] * 40 + ["2021-01-01"] * 30)
+    df = pd.DataFrame({"order_date": pd.to_datetime(dates), "x": range(100)})
+    train, cal, test = temporal_train_cal_test(df)
+    assert train["order_date"].max() < cal["order_date"].min()
+    assert cal["order_date"].max() < test["order_date"].min()
+    assert len(train) + len(cal) + len(test) == 100

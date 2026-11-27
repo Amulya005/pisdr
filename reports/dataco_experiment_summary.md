@@ -8,9 +8,9 @@ attempted first and abandoned on runtime grounds on this hardware; the
 change of model is recorded here and in the script.
 
 ## Measured results (test period, untouched by fitting or calibration)
-- PR-AUC 0.810 | ROC-AUC 0.736 | Brier 0.197 | Calibration error (ECE) 0.011
+- PR-AUC 0.809 | ROC-AUC 0.734 | Brier 0.197 | Calibration error (ECE) 0.012
 - Conformal: q = 0.644 calibrated on the calibration period ONLY.
-  Empirical coverage on the future test period: 0.897 (nominal 0.90).
+  Empirical coverage on the future test period: 0.896 (nominal 0.90).
   Prediction sets: 23,297 of 45,130 uncertain (51.6%), 0 empty.
 - Context: published DataCo results reporting ~99% accuracy use features
   this project bans as leakage (docs/02). These lower numbers are what the

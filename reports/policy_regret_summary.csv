@@ -1,6 +1,6 @@
 policy,mean_regret,median_regret,worst_regret
-no_action,199672.0,129096.0,764940.0
+no_action,195824.0,118158.0,759848.0
 oracle,0.0,0.0,0.0
-point_prediction,921046.0,821520.0,2053800.0
-rule_based,199672.0,129096.0,764940.0
-uncertainty_aware,1104651.0,958560.0,2396400.0
+point_prediction,920996.0,820200.0,2050500.0
+rule_based,195824.0,118158.0,759848.0
+uncertainty_aware,1101074.0,955200.0,2388000.0
